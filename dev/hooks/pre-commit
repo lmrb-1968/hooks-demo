@@ -4,6 +4,7 @@ RED='\033[1;31m' # Bold red
 NC='\033[0m' # No Color
 
 id
+pwd
 #env
 
 #if ! [ -x "$(command -v xygeni)" ]
@@ -12,4 +13,6 @@ id
 #    exit 1
 #fi
 
-/home/lrodriguez/work/xygeni_scanner/xygeni -V secrets -d . --all-files --fail-on=high
+/home/lrodriguez/work/xygeni_scanner/xygeni --verbose secrets -d /home/lrodriguez/work/repos/hooks-demo --all-files 
+#--fail-on=high
+
