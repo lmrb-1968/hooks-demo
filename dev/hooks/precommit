@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+RED='\033[1;31m' # Bold red
+NC='\033[0m' # No Color
+
+if ! [ -x "$(command -v xygeni)" ]
+then
+    echo -e "${RED}Xygeni scanner could not be found.${NC} Please make sure Xygeni is installed properly.\nDocumentation can be found here: https://docs.xygeni.io/scanner/xygeni_scanner.html#_installation"
+    exit 1
+fi
+
+/home/lrodriguez/work/xygeni_scanner/xygeni secrets --all-files --fail-on=high
