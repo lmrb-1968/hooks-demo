@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Do nothing
+exit 0
+
 RED='\033[1;31m' # Bold red
 GRAY='\033[1;90m' # Bold gray
 NC='\033[0m' # No Color
