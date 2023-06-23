@@ -17,8 +17,14 @@ jobs:
       - name: Xygeni-Scanner
         uses: xygeni/xygeni-action@v2.1
         id: Xygeni-Scanner
+        env:
+          XYGENI_SERVER:
+          XYGENI_TOKEN: ${{ secrets.XYGENI_TOKEN }}
         with:
+          # https://labdev.xygeni.io/dashboard
+          xygeni_url: ${{ vars.XYGENI_URL }}
           token: ${{ secrets.XYGENI_TOKEN }}
+          gh_token: ${{ github.token }}
           command: >-
             -q secrets -n ${{ github.repository }} -d ${{ github.workspace }}
               --format sarif --output ${{ github.workspace }}/secrets.sarif
