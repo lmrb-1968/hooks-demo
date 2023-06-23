@@ -24,9 +24,9 @@ jobs:
 
       - name: Run scanner
         shell: bash
-        run: >-
-          ${{ runner.temp }}/xygeni_scanner/xygeni --token="${{ secrets.XYGENI_TOKEN }}" --url="${{ vars.XYGENI_URL }}" secrets 
-            --name="${{ github.repository }}" --dir="${{ github.workspace }}"
+        run: |-
+          ${{ runner.temp }}/xygeni_scanner/xygeni --token="${{ secrets.XYGENI_TOKEN }}" --url="${{ vars.XYGENI_URL }}" secrets \ 
+            --name="${{ github.repository }}" --dir="${{ github.workspace }}" --no-stdin \
             --format=sarif --output="${{ github.workspace }}/secrets.sarif"
         env:
           API_KEY: ${{ secrets.XYGENI_TOKEN }}
