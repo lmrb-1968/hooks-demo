@@ -17,15 +17,15 @@ jobs:
       - name: Download
         shell: bash
         run: |
-          curl -s -o ${{ env.RUNNER_TEMP }}/xygeni_scanner.zip -H "Authorization: Bearer ${{ secrets.XYGENI_TOKEN }}" -L ${{ vars.XYGENI_URL }}/scan/releases
-          cd ${{ env.RUNNER_TEMP }}
-          unzip ${{ env.RUNNER_TEMP }}/xygeni_scanner.zip
-          rm ${{ env.RUNNER_TEMP }}/xygeni_scanner.zip
+          curl -s -o ${{ runner.temp }}/xygeni_scanner.zip -H "Authorization: Bearer ${{ secrets.XYGENI_TOKEN }}" -L ${{ vars.XYGENI_URL }}/scan/releases
+          cd ${{ runner.temp }}
+          unzip ${{ runner.temp }}/xygeni_scanner.zip
+          rm ${{ runner.temp }}/xygeni_scanner.zip
 
       - name: Run scanner
         shell: bash
         run: >-
-          ${{ env.RUNNER_TEMP }}/xygeni_scanner/xygeni secrets 
+          ${{ runner.temp }}/xygeni_scanner/xygeni secrets 
             --name="${{ github.repository }}" --dir="${{ github.workspace }}"
             --format=sarif --output="${{ github.workspace }}/secrets.sarif"
         env:
