@@ -5,7 +5,7 @@ compliant:
   commit_id: 912ec803b2ce49e4a541068d495ab57000000000
   role: arn:aws:iam::123456789000:role/role-name
 
-# Noncompliant - 2
+# Noncompliant
 noncompliant:
   aws_id: AKIAHI38FAKE1IWUQEEN
   aws_key: PA3XsxZ8d8cPQLmnZzFAKEdzC6ND2a8vhbyXU/Dw

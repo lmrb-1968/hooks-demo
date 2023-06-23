@@ -1,18 +1,30 @@
 #!/usr/bin/env bash
 
 RED='\033[1;31m' # Bold red
+GRAY='\033[1;90m' # Bold gray
 NC='\033[0m' # No Color
 
-id
-pwd
-#env
+# Write your Xygeni scanner location (if not in PATH already)
+PATH=${PATH}:/home/lrodriguez/work/xygeni_scanner
 
-#if ! [ -x "$(command -v xygeni)" ]
-#then
-#    echo -e "${RED}Xygeni scanner could not be found.${NC} Please make sure Xygeni is installed properly.\nDocumentation can be found here: https://docs.xygeni.io/scanner/xygeni_scanner.html#_installation"
-#    exit 1
-#fi
+if ! [ -x "$(command -v xygeni)" ]
+then
+    echo -e "${RED}Xygeni scanner could not be found.${NC} Please make sure Xygeni is installed properly.\nDocumentation can be found here: https://docs.xygeni.io/scanner/xygeni_scanner.html#_installation"
+    exit 1
+fi
 
-/home/lrodriguez/work/xygeni_scanner/xygeni secrets -d . --staged-files --no-stdin 
-#--fail-on=high
+# Run secrets scan on the staged files only ("no new secrets")
+xygeni -q secrets -d . --staged-files --fail-on=high --no-stdin --format text --output ./.secrets.txt 
+EXIT_CODE=$?
 
+if [[ $EXIT_CODE -gt 127 ]]; then
+  echo -e "${RED}Secrets found !${NC} Please remove them before commiting changes."
+  cat ./.secrets.txt
+elif [[ $EXIT_CODE -ne 0 ]]; then
+  echo -e "${RED}Xygeni scan failed.${NC} Please contact your Xygeni administrator."
+  echo -e "Log files can be found in ${GRAY}logs/noproject/secrets_noproject.log${NC} "
+fi
+
+# Cleanup and tell the git commit to stop (not 0) or continue (0)
+rm -f ./.secrets.txt >/dev/null 2>&1 
+exit $EXIT_CODE
