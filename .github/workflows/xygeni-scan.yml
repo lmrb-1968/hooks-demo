@@ -31,7 +31,6 @@ jobs:
       - name: Run scanner
         shell: bash
         run: >
-          mkdir "${{ runner.temp }}/reports"
           ${{ runner.temp }}/xygeni_scanner/xygeni 
           --token="${{ secrets.XYGENI_TOKEN }}" --url="${{ vars.XYGENI_URL }}" 
           secrets 
