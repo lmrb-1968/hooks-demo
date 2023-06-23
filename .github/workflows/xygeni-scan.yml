@@ -14,20 +14,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3.1.0
 
-      - name: Xygeni-Scanner
-        uses: xygeni/xygeni-action@v2.1
-        id: Xygeni-Scanner
+      - name: Download
+        shell: bash
+        run: |
+          curl -s -o ${{ env.RUNNER_TEMP }}/xygeni_scanner.zip -H "Authorization: Bearer ${{ secrets.XYGENI_TOKEN }}" -L ${{ vars.XYGENI_URL }}/scan/releases
+          cd ${{ env.RUNNER_TEMP }}
+          unzip ${{ env.RUNNER_TEMP }}/xygeni_scanner.zip
+          rm ${{ env.RUNNER_TEMP }}/xygeni_scanner.zip
+
+      - name: Run scanner
+        shell: bash
+        run: >-
+          ${{ env.RUNNER_TEMP }}/xygeni_scanner/xygeni secrets 
+            --name="${{ github.repository }}" --dir="${{ github.workspace }}"
+            --format=sarif --output="${{ github.workspace }}/secrets.sarif"
         env:
-          XYGENI_SERVER:
-          XYGENI_TOKEN: ${{ secrets.XYGENI_TOKEN }}
-        with:
-          # https://labdev.xygeni.io/dashboard
-          xygeni_url: ${{ vars.XYGENI_URL }}
-          token: ${{ secrets.XYGENI_TOKEN }}
-          gh_token: ${{ github.token }}
-          command: >-
-            -q secrets -n ${{ github.repository }} -d ${{ github.workspace }}
-              --format sarif --output ${{ github.workspace }}/secrets.sarif
+          API_KEY: ${{ secrets.XYGENI_TOKEN }}
+
+      #- name: Xygeni-Scanner
+      #  uses: xygeni/xygeni-action@v2.1
+      #  id: Xygeni-Scanner
+      #  env:
+      #    XYGENI_SERVER:
+      #    XYGENI_TOKEN: ${{ secrets.XYGENI_TOKEN }}
+      #  with:
+      #    # https://apidev.xygeni.io/deps-doctor-service
+      #    xygeni_url: ${{ vars.XYGENI_URL }}
+      #    token: ${{ secrets.XYGENI_TOKEN }}
+      #    gh_token: ${{ github.token }}
+      #    command: >-
+      #      -q secrets -n ${{ github.repository }} -d ${{ github.workspace }}
+      #        --format sarif --output ${{ github.workspace }}/secrets.sarif
 
       - name: Upload SARIF report
         uses: github/codeql-action/upload-sarif@v2
