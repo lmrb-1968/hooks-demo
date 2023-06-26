@@ -1,2 +1,5 @@
 .xygeni.secrets.baseline.json
 logs/*
+dev/hooks/logs/*
+/.xygeni.iac.baseline.json
+/hooks-demo.iml
