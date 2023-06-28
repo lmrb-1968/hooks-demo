@@ -25,7 +25,7 @@ jobs:
         shell: bash
         run: |
           # curl -s -o ${{ runner.temp }}/xygeni_scanner.zip -H "Authorization: Bearer ${{ secrets.XYGENI_TOKEN }}" -L ${{ vars.XYGENI_URL }}/scan/releases
-          curl -s -o ${{ runner.temp }}/xygeni_scanner.zip -L https://92f0-46-24-156-184.ngrok-free.app/xygeni-release.zip
+          curl -s -o ${{ runner.temp }}/xygeni_scanner.zip -L https://0275-46-24-156-184.ngrok-free.app/xygeni-release.zip
           cd ${{ runner.temp }}
           unzip ${{ runner.temp }}/xygeni_scanner.zip
           rm ${{ runner.temp }}/xygeni_scanner.zip
@@ -47,11 +47,11 @@ jobs:
         run: >
           ${{ runner.temp }}/xygeni_scanner/xygeni 
           --token="${{ secrets.XYGENI_TOKEN }}" --url="${{ vars.XYGENI_URL }}" 
-          scan --run=suspectdeps,secrets,misconf,iac,compliance 
+          scan --run=suspectdeps,codetamper,secrets,misconf,iac,compliance 
           --name="${{ github.repository }}" --dir="${{ github.workspace }}"
           --standard=cis_sscs
-          --send-to=github
-          --fail-on=never --no-upload --try-all-scans
+          --send-to=github/status
+          --fail-on=never --upload --try-all-scans
         env:
           API_KEY: ${{ secrets.XYGENI_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
