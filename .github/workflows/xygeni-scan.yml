@@ -30,30 +30,84 @@ jobs:
           unzip ${{ runner.temp }}/xygeni_scanner.zip
           rm ${{ runner.temp }}/xygeni_scanner.zip
 
-      #- name: Run secrets scan
-      #  shell: bash
-      #  run: >
-      #    ${{ runner.temp }}/xygeni_scanner/xygeni
-      #    --token="${{ secrets.XYGENI_TOKEN }}" --url="${{ vars.XYGENI_URL }}"
-      #    secrets
-      #    --name="${{ github.repository }}" --dir="${{ github.workspace }}" --no-stdin
-      #    --format=sarif --output="${{ runner.temp }}/reports/secrets.sarif"
-      #    --fail-on=never
-      #  env:
-      #    API_KEY: ${{ secrets.XYGENI_TOKEN }}
-
       - name: Run full scan
         shell: bash
         run: >
           ${{ runner.temp }}/xygeni_scanner/xygeni 
           --token="${{ secrets.XYGENI_TOKEN }}" --url="${{ vars.XYGENI_URL }}" 
-          scan --run=suspectdeps,codetamper,secrets,misconf,iac,compliance 
+          scan 
+          --run=suspectdeps,codetamper,secrets,misconf,iac,compliance 
           --name="${{ github.repository }}" --dir="${{ github.workspace }}"
           --standard=cis_sscs
-          --send-to=github/status
+          --send-to=github/alerts
           --fail-on=never --upload --try-all-scans
         env:
-          API_KEY: ${{ secrets.XYGENI_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+          
+      - name: Run secrets
+        shell: bash
+        run: >
+          ${{ runner.temp }}/xygeni_scanner/xygeni
+          --token="${{ secrets.XYGENI_TOKEN }}" --url="${{ vars.XYGENI_URL }}"
+          secrets 
+          --name="${{ github.repository }}" --dir="${{ github.workspace }}"
+          --send-to=github/status --fail-on=critical --upload
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Run misconf
+        shell: bash
+        run: >
+          ${{ runner.temp }}/xygeni_scanner/xygeni
+          --token="${{ secrets.XYGENI_TOKEN }}" --url="${{ vars.XYGENI_URL }}"
+          misconf 
+          --name="${{ github.repository }}" --dir="${{ github.workspace }}"
+          --send-to=github/status --fail-on=critical --upload
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Run codetamper
+        shell: bash
+        run: >
+          ${{ runner.temp }}/xygeni_scanner/xygeni
+          --token="${{ secrets.XYGENI_TOKEN }}" --url="${{ vars.XYGENI_URL }}"
+          codetamper --all 
+          --name="${{ github.repository }}" --dir="${{ github.workspace }}"
+          --send-to=github/status --fail-on=critical --upload
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Run iac
+        shell: bash
+        run: >
+          ${{ runner.temp }}/xygeni_scanner/xygeni
+          --token="${{ secrets.XYGENI_TOKEN }}" --url="${{ vars.XYGENI_URL }}"
+          iac 
+          --name="${{ github.repository }}" --dir="${{ github.workspace }}"
+          --send-to=github/status --fail-on=critical --upload
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Run suspectdeps
+        shell: bash
+        run: >
+          ${{ runner.temp }}/xygeni_scanner/xygeni
+          --token="${{ secrets.XYGENI_TOKEN }}" --url="${{ vars.XYGENI_URL }}"
+          suspectdeps 
+          --name="${{ github.repository }}" --dir="${{ github.workspace }}"
+          --send-to=github/status --fail-on=critical --upload
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Run compliance
+        shell: bash
+        run: >
+          ${{ runner.temp }}/xygeni_scanner/xygeni
+          --token="${{ secrets.XYGENI_TOKEN }}" --url="${{ vars.XYGENI_URL }}"
+          compliance --standard=cis_sscs
+          --name="${{ github.repository }}" --dir="${{ github.workspace }}"
+          --send-to=github/status --fail-on=critical --upload
+        env:
           GITHUB_TOKEN: ${{ github.token }}
 
       #- name: Xygeni-Scanner
