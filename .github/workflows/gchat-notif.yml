@@ -13,6 +13,7 @@ jobs:
         run: exit 1 
       
       - name: notify
+        if: failure()
         run: |
           $body=@"
           { "text": "${{ github.workflow }} *${{ job.status }}* on repo ${{ github.repository }}\nSee <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|pipeline log>." }
