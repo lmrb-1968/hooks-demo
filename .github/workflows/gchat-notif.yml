@@ -1,0 +1,20 @@
+name: Simulate GoogleChat Notif
+
+on: workflow_dispatch
+
+jobs:
+  main:
+    runs-on: windows-latest
+    name: Build simulation
+    
+    steps:
+      - name: build
+        # simulate failure
+        run: exit 1 
+      
+      - name: notify
+        run: |
+          $body=@"
+          { "text": "${{ github.workflow }} *${{ job.status }}* on repo ${{ github.repository }}\nSee <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|pipeline log>." }
+          "@
+          curl -sSLf -o nul -X POST '${{ secrets.NB_FAILURES_WEBHOOK }}' --data "$body"
