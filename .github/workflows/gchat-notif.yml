@@ -19,7 +19,7 @@ jobs:
           $workflowUrl='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           $title='${{ github.workflow }} *${{ job.status }}* on repo ${{ github.repository }}'
           $body = @{
-            text = $title + '\n<' + $workflowUrl + '>.'
+            text = $title + ' <' + $workflowUrl + '>.'
           }
-          $body | ConvertTo-Json
-          $body | ConvertTo-Json -Compress | curl.exe -sSLfv -o nul -X POST --url '${{ secrets.NB_FAILURES_WEBHOOK }}' --data-raw "@-"
+          $body | ConvertTo-Json -Compress
+          $body | ConvertTo-Json -Compress | curl.exe -sSLfv -o nul -X POST '${{ secrets.NB_FAILURES_WEBHOOK }}' --data-raw "@-"
