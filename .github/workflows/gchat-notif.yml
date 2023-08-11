@@ -22,5 +22,5 @@ jobs:
             text = $title + ' - See <' + $workflowUrl + '|pipeline log>.'
           }
           $out = $body | ConvertTo-Json -Compress
-          $len = 'Content-Length:' + [System.Text.Encoding]::ASCII.GetByteCount($out)
-          $out | curl.exe -sSLfv -o nul -X POST '${{ secrets.NB_FAILURES_WEBHOOK }}' -H 'Content-Type: application/json' -H $len --data-raw "@-"
+          $len = 'Content-Length: ' + [System.Text.Encoding]::ASCII.GetByteCount($out)
+          $out | curl.exe -sSLfv -o nul -X POST '${{ secrets.NB_FAILURES_WEBHOOK }}' -H 'Content-Type: application/json' -H "$len" --data-raw "@-"
