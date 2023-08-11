@@ -15,8 +15,8 @@ jobs:
       - name: notify
         if: failure()
         run: |
-          $body=@"
-          { "text": "${{ github.workflow }} *${{ job.status }}* on repo ${{ github.repository }}\nSee <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|pipeline log>." }
-          "@
+          $workflowUrl=@"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"@
+          $title=@"${{ github.workflow }} *${{ job.status }}* on repo ${{ github.repository }}"@
+          $body=@"{ "text": "$title\nSee <$workflowUrl|pipeline log>." }"@
           echo "$body" | 
           curl -sSLf -o nul -X POST --url '${{ secrets.NB_FAILURES_WEBHOOK }}' --data-raw "@-"
