@@ -21,5 +21,4 @@ jobs:
           { "text": "$title\nSee <$workflowUrl|pipeline log>." }
           "@
           echo "`'$body`'"
-          echo "$body" | 
-          curl -sSLf -o nul -X POST --url '${{ secrets.NB_FAILURES_WEBHOOK }}' --data-raw "@-"
+          curl -sSLfv -o nul -X POST --url '${{ secrets.NB_FAILURES_WEBHOOK }}' --data-raw "`'$body`'"
