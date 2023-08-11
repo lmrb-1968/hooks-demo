@@ -13,12 +13,12 @@ jobs:
         run: exit 1 
       
       - name: notify
+        shell: pwsh
         if: failure()
         run: |
           $workflowUrl='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           $title='${{ github.workflow }} *${{ job.status }}* on repo ${{ github.repository }}'
-          $body=@"
-          { "text": "$title\nSee <$workflowUrl|pipeline log>." }
-          "@
-          echo "`'$body`'"
-          curl -sSLfv -o nul -X POST --url '${{ secrets.NB_FAILURES_WEBHOOK }}' --data-raw "`'$body`'"
+          $body = @{
+            text = "$title\n<$workflowUrl|pipeline log>."
+          }
+          $body | ContertTo-Json -Compress | curl -sSLfv -o nul -X POST --url '${{ secrets.NB_FAILURES_WEBHOOK }}' --data-raw "@-"
