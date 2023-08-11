@@ -21,4 +21,4 @@ jobs:
           $body = @{
             text = "$title\n<$workflowUrl|pipeline log>."
           }
-          $body | ContertTo-Json -Compress | curl.exe -sSLfv -o nul -X POST --url '${{ secrets.NB_FAILURES_WEBHOOK }}' --data-raw "@-"
+          $body | ContertTo-JSON -Compress | curl.exe -sSLfv -o nul -X POST --url '${{ secrets.NB_FAILURES_WEBHOOK }}' --data-raw "@-"
