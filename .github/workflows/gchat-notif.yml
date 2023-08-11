@@ -18,4 +18,4 @@ jobs:
           $body=@"
           { "text": "${{ github.workflow }} *${{ job.status }}* on repo ${{ github.repository }}\nSee <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|pipeline log>." }
           "@
-          curl -sSLf -o nul -X POST '${{ secrets.NB_FAILURES_WEBHOOK }}' --data "$body"
+          curl -sSLf -o nul -X POST '${{ secrets.NB_FAILURES_WEBHOOK }}' --data "`'$body`'"
