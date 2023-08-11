@@ -13,7 +13,7 @@ jobs:
         run: exit 1 
       
       - name: notify
-        shell: pwsh
+        shell: powershell
         if: failure()
         run: |
           $workflowUrl='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
@@ -21,4 +21,4 @@ jobs:
           $body = @{
             text = "$title\n<$workflowUrl|pipeline log>."
           }
-          $body | ContertTo-Json -Compress | curl -sSLfv -o nul -X POST --url '${{ secrets.NB_FAILURES_WEBHOOK }}' --data-raw "@-"
+          $body | ContertTo-Json -Compress | curl.exe -sSLfv -o nul -X POST --url '${{ secrets.NB_FAILURES_WEBHOOK }}' --data-raw "@-"
