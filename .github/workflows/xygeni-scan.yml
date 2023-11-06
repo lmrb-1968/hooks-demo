@@ -25,7 +25,7 @@ jobs:
         shell: bash
         run: |
           # curl -s -o ${{ runner.temp }}/xygeni_scanner.zip -H "Authorization: Bearer ${{ secrets.XYGENI_TOKEN }}" -L ${{ vars.XYGENI_URL }}/scan/releases
-          curl -s -o ${{ runner.temp }}/xygeni_scanner.zip -L https://0275-46-24-156-184.ngrok-free.app/xygeni-release.zip
+          curl -s -o ${{ runner.temp }}/xygeni_scanner.zip -L https://01d4-77-231-97-73.ngrok-free.app/xygeni-release.zip
           cd ${{ runner.temp }}
           unzip ${{ runner.temp }}/xygeni_scanner.zip
           rm ${{ runner.temp }}/xygeni_scanner.zip
